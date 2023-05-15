@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: jenkins-rs
+spec:
+  minReadySeconds: 2
+  replicas: 5
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      name: jenkins
+      labels: 
+        app: jenkins
+    spec:
+      containers:
+        - image: jenkins/jenkins:lts-jdk11
+          name:  jenkins
+          ports: 
+            - containerPort: 8080
+              name: jenkin-port
+              protocol: TCP
+        - image: alpine:3.14
+          name:  alpine
+          args: 
+            - sleep
+            - 1d     

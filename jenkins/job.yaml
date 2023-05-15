@@ -1,0 +1,76 @@
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: job 
+#   labels:
+#     app: nginx
+# spec:
+#   # selector:
+#   #   matchLabels: 
+#   #     frontend: web
+#   template: 
+#     metadata:
+#       name: nginx-job
+#     spec:
+#       restartPolicy: Never
+#       containers:
+#         - image: nginx:1.23
+#           name: nginx
+#           ports:
+#             - containerPort: 80
+#               name: nginx-port
+#               protocol: TCP        
+
+
+
+
+
+
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-object
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      name: job
+  template:
+    metadata:
+      name: job-pod
+      labels:
+        name: job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: nginx-pod-job
+          image: nginx:1.23
+          ports:
+            - containerPort: 80    
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

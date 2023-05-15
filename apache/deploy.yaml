@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: httpd-deploy
+  labels: 
+    application: apache
+spec:
+  minReadySeconds: 8
+  replicas: 2
+  selector:
+    matchLabels: 
+      app: httpd-apache 
+  strategy:
+    type: RollingUpdate 
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template: 
+    metadata:
+      name: deploy
+      labels: 
+        app: httpd-apache
+    spec:
+      containers: 
+        - image: httpd:2.4
+          name: apache-container
+          ports: 
+            - containerPort: 80
+              name: apache-port
+              protocol: TCP   
