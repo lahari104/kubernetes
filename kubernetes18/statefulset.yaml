@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-statefulset 
+  labels:
+    db: mysql
+    ver: "8.0.33"
+spec:
+  minReadySeconds: 4
+  replicas: 4
+  selector:
+    matchLabels:
+      app: mysql-sts
+  template:
+    metadata:
+      name: mysql-pod
+      labels:
+        app: mysql-sts 
+    spec:
+      containers:
+        - name: mysql-container
+          image: mysql:8.0.33
+          envFrom:
+            - secretRef:
+                name: mysql-secret
+                optional: false
+          resources: 
+            requests:
+              cpu: "150m"
+              memory: "100Mi"
+            limits:
+              cpu: "200m"
+              memory: "200Mi"
+          readinessProbe:
+            exec:
+              command: 
+                - pwd 
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5 
+          livenessProbe:
+            exec:
+              command: 
+                - pwd 
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 3306
+              name: mysql-port
+              protocol: TCP
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxUnavailable: 25%
+      partition: 1
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: mysql-sts-pvc
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: ebs-sc
+        resources:
+          requests:
+            storage: 1Gi 
+  

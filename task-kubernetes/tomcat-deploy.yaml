@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-deploy
+  labels:
+    app: tomcat
+spec:
+  minReadySeconds: 3
+  replicas: 4
+  selector: 
+    matchLabels: 
+      app: tomcat
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: tomcat
+      labels:
+        app: tomcat
+        ver: "2.0"    
+    spec: 
+      containers:
+        - name: tomcat-container
+          image: tomcat
+          ports:
+            - name: tomcat-port
+              containerPort: 8080
+              protocol: TCP
+      initContainers:
+        - name: alpine
+          image: alpine:3.18.2
+          args:
+            - sleep
+            - 10s  
+        - name: alpine1
+          image: alpine:3.17.4
+          args: 
+            - sleep
+            - 15s 

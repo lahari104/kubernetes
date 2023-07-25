@@ -1,0 +1,130 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: login-deployment
+  labels:
+    app: login-app
+spec:
+  minReadySeconds: 4
+  replicas: 2
+  selector:
+    matchLabels:
+      app: login
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: login-pod
+      labels:
+        app: login
+    spec:
+      containers:
+        - name: login-app-container
+          image: lahari23/ingress-repository:login
+          ports:
+            - name: login-app-port
+              containerPort: 80
+              protocol: TCP
+
+        
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-deploy
+  labels:
+    app: catalog-app
+spec:
+  minReadySeconds: 4
+  replicas: 2
+  selector:
+    matchLabels: 
+      app: catalog
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: catalog-template
+      labels:
+        app: catalog
+    spec:
+      containers:
+        - name: catalog-container
+          image: lahari23/ingress-repository:catalog
+          ports:
+            - name: catalog-port
+              containerPort: 80
+              protocol: TCP
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basket-deploy
+  labels:
+    app: basket-app
+spec:
+  minReadySeconds: 4
+  replicas: 2
+  selector:
+    matchLabels: 
+      app: basket
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: basket-template
+      labels:
+        app: basket
+    spec:
+      containers:
+        - name: basket-container
+          image: lahari23/ingress-repository:basket
+          ports:
+            - name: basket-port
+              containerPort: 80
+              protocol: TCP
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-deploy
+  labels:
+    app: order-app
+spec:
+  minReadySeconds: 4
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: order-template
+      labels:
+        app: order
+    spec:
+      containers:
+        - name: order-container
+          image: lahari23/ingress-repository:orders
+          ports:
+            - name: order-port
+              containerPort: 80
+              protocol: TCP

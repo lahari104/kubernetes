@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-deploy
+  labels:
+    app: httpd
+spec:
+  minReadySeconds: 3
+  replicas: 4
+  selector: 
+    matchLabels: 
+      app: httpd
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: httpd
+      labels:
+        app: httpd
+        ver: "3.0"    
+    spec: 
+      containers:
+        - name: httpd-container
+          image: httpd
+          ports:
+            - name: httpd-port
+              containerPort: 80
+              protocol: TCP
+      initContainers:
+        - name: alpine
+          image: alpine:3.18.2
+          args:
+            - sleep
+            - 10s  
+        - name: alpine1
+          image: alpine:3.17.4
+          args: 
+            - sleep
+            - 15s 

@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-map
+data:
+  DATABASE: mysql
+  AUTHOR: lahari
+  VERSION: "8.3"
